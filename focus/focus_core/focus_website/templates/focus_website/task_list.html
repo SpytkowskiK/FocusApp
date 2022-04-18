@@ -1,0 +1,104 @@
+{% extends 'focus_website/main.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Focus</title>
+</head>
+<body>
+
+<div class="header-bar">
+    <div>
+        <h1>Witaj, {{ request.user.username|title }}.</h1>
+        {% if request.user.is_superuser %}
+        <h3 style="margin:0">Twój zespół ma <b>{{ tasks.count }}</b>
+            {% if tasks.count > 4 %}
+                niewykonanych zadań
+            {% elif tasks.count == 1 %}
+                niewykonane zadanie
+            {% elif tasks.count <= 0 %}
+                niewykonanych zadań
+            {% else %}
+                niewykonane zadania
+            {% endif %}
+        </h3>
+        {% else %}
+        <h3 style="margin:0">Masz <b>{{ tasks.count }}</b>
+            {% if tasks.count > 4 %}
+                niewykonanych zadań
+            {% elif tasks.count == 1 %}
+                niewykonane zadanie
+            {% elif tasks.count <= 0 %}
+                niewykonanych zadań
+            {% else %}
+                niewykonane zadania
+            {% endif %}
+        </h3>
+        {% endif %}
+    </div>
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}">Wyloguj mnie</a>
+{% else %}
+    <a href="{% url 'login' %}">Zaloguj</a>
+{% endif %}
+</div>
+<div id="search-add-wrapper">
+    <form method="GET">
+        <input type="text" name="search" value="{{ search_input }}">
+        <input class="button" type="submit" value="Szukaj">
+    </form>
+    {% if request.user.is_superuser %}
+        <a id="add-link" href="{% url 'create' %}">&#43;</a>
+    {% else %}
+        <a id="add-link" href="{% url 'personal' %}">&#43;</a>
+    {% endif %}
+</div>
+
+<div class="task-items-wrapper">
+    {% for task in tasks %}
+        <div class="task-wrapper">
+            {% if task.complete == True %}
+            <div class="task-title">
+                <div class="task-complete-icon"></div>
+                {% if request.user.is_superuser %}
+                <i><s><a href="{% url 'update' task.id %}">{{task}}</a></s></i>
+                {% else %}
+                <i><s><a href="{% url 'task-view' task.id %}">{{task}}</a></s></i>
+                {% endif %}
+
+            </div>
+            {% if request.user.is_superuser %}
+                <div>
+                    <b><a class="task-user" id="completed" href="{% url 'update' task.id %}">{{task.user|title}}</a></b>
+                    <a class="delete-link-check" href="{% url 'delete' task.id %}">&check;</a>
+                </div>
+            {% else %}
+                <a class="delete-link-check" href="{% url 'delete' task.id %}">&check;</a>
+            {% endif %}
+            {% else  %}
+            <div class="task-title">
+                <div class="task-incomplete-icon"></div>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'update' task.id %}">{{task}}</a>
+                {% else %}
+                <a href="{% url 'task-view' task.id %}">{{task}}</a>
+                {% endif %}
+            </div>
+                {% if request.user.is_superuser %}
+                    <div>
+                        <b><a class="task-user" href="{% url 'update' task.id %}">{{task.user|title}}</a></b>
+                        <a class="delete-link-x" href="{% url 'delete' task.id %}">&#215;</a>
+                    </div>
+                {% else %}
+                    <a class="delete-link-x" href="{% url 'delete' task.id %}">&#215;</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% empty %}
+        <span class="emoji clock" role="img" aria-label="clock"></span>
+    {% endfor %}
+</div>
+
+</body>
+</html>
+{% endblock content %}

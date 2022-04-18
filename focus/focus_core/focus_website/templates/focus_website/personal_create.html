@@ -1,0 +1,22 @@
+{% extends 'focus_website/main.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Focus</title>
+</head>
+<body>
+
+<div class="header-bar">
+    <h3>Utwórz Focus</h3>
+    <a href="{% url 'tasks' %}">Powrót do listy</a>
+</div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Zatwierdź">
+    </form>
+
+</body>
+</html>
+{% endblock content %}

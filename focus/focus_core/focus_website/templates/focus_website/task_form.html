@@ -1,0 +1,26 @@
+{% extends 'focus_website/main.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Focus</title>
+</head>
+<body>
+<div class="header-bar">
+    <h3><a href="{% url 'tasks' %}">&#8592;Powrót</a></h3>
+</div>
+
+<div class="card-body">
+    <form method="POST" action="" spellcheck="false">
+        {% csrf_token %}
+        {% if request.user.is_superuser %}
+        {{ form.as_p }}
+        <input class="button" type="submit" value="Zatwierdź">
+        {% else %}
+        {{ form.as_p }}
+        {% endif %}
+    </form>
+</div>
+</body>
+</html>
+{% endblock content %}

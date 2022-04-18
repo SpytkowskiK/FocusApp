@@ -1,0 +1,28 @@
+{% extends 'focus_website/main.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Focus</title>
+</head>
+<body>
+<div class="header-bar">
+    <h3>Usuwanie zadania</h3>
+</div>
+
+    <form method="POST">
+        {% csrf_token %}
+        {% if request.user == task.user %}
+        <p>Czy na pewno chcesz usunąć to zadanie: <br><br>{{ task }}?</p>
+            <input type="submit" class="button" value="Usuń">
+        {% elif request.user.is_superuser %}
+        <p>Czy na pewno chcesz usunąć to zadanie: <br><br>{{ task }}?</p>
+            <input type="submit" class="button" value="Usuń">
+        {% else %}
+        <p>To nie jest Twoje zadanie.<br>Nie możesz go usunąć</p>
+        {% endif %}
+        <a href="{% url 'tasks' %}"><input type="button" class="button" value="Zabierz mnie spowrotem"></a>
+    </form>
+</body>
+</html>
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends 'focus_website/main.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Focus</title>
+</head>
+<body>
+    <div class="header-bar">
+        <h1>Logowanie</h1>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="button" type="submit" value="Zaloguj">
+    </form>
+    <div class="link-footer">
+        <p>Nie posiadasz konta? <a class="link" href="{% url 'register' %}">Zarejestruj się</a></p>
+    </div>
+</body>
+</html>
+{% endblock content %}
